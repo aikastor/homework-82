@@ -26,18 +26,15 @@ router.get('/', async (req, res) => {
 
   if (album) {
     response = await Track.find({album: album});
-    res.send(response);
 
-  } else if(artist) {
+  } else if (artist) {
     const albums = await Album.find({artist: artist});
     response = await Track.find().where('album').in(albums).exec();
 
-    res.send(response);
   } else {
     response = await Track.find();
-    res.send(response);
   }
-
+  res.send(response);
 });
 
 router.post('/', upload.single('image'), async (req, res) => {
