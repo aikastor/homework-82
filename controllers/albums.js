@@ -20,14 +20,46 @@ const upload = multer({storage});
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const artist = req.query.artist;
   let response;
+  const artist = req.query.artist;
 
-  artist ?
-      response = await Album.find()
-      :
-      response = await Album.find({artist: artist})
+  if (!artist) {
+    response = await Album.find();
+    res.send(response);
+  } else {
+    response = await Album.find({artist: artist});
+    res.send(response);
+  }
 
-  res.send(response);
-  
 });
+router.get('/:id', async (req, res) => {
+  try {
+    const item = await Album.findById(req.params.id).populate('artist');
+
+    if (!item) {
+      return res.status(404).send({message: 'Not found'});
+    }
+
+    res.send(item);
+  } catch (e) {
+    res.status(404).send({message: 'Not found'});
+  }
+});
+router.post('/', upload.single('image'), async (req, res) => {
+  const albumData = req.body;
+
+  if(req.file) {
+    albumData.image = req.file.filename;
+  }
+
+  const album = new Album(albumData);
+
+  try {
+    await album.save();
+    res.send(album)
+  } catch (e) {
+    res.status(400).send(e)
+  }
+});
+
+module.exports = router;
