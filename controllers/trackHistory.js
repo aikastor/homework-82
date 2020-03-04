@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
   const token = req.get('token');
   const user = await User.findOne({token});
 
-  if(!user) return res.send(401).send({error: 'User is unauthorized!'});
+  if(!user) return res.status(401).send({error: 'User is unauthorized!'});
 
   const trackHistory = new TrackHistory(req.body);
 
