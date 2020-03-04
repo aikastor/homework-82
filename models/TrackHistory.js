@@ -18,4 +18,5 @@ const TrackHistorySchema = new Schema({
 });
 
 const TrackHistory = mongoose.model('TrackHistory', TrackHistorySchema);
+
 module.exports = TrackHistory;
