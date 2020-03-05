@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
 
-
   const token = req.get('token');
   const user = await User.findOne({token});
 
