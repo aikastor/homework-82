@@ -1,5 +1,5 @@
+const nanoid = require('nanoid');
 const mongoose = require('mongoose');
-
 const bcrypt = require('bcrypt');
 
 const SALT_FACTOR = 10;
@@ -15,7 +15,14 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  token: {
+    type: String,
+    required: true
+  }
 });
+UserSchema.methods.generateToken = function () {
+  this.token = nanoid();
+};
 
 UserSchema.pre('save', async function (next) {
 
